@@ -62,8 +62,8 @@
             echo "<li>Hobi : $hobi</li>";
             echo "<li>telepon : $telepon</li>";
             echo "<li>jurusan : $jurusan</li>";
-              echo "<li>warna kesukaan : $warna_kesukaan</li>";
-                echo "<li>kendaraan impian : $kendaraan_impian</li>";
+            echo "<li>warna kesukaan : $warna_kesukaan</li>";
+            echo "<li>kendaraan impian : $kendaraan_impian</li>";
             echo "</ul>";
             ?>
         </p>
