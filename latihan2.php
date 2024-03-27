@@ -9,21 +9,35 @@ $produk = array(
 );
 
 // Mendapatkan data dari form
-$namaPelanggan = $_POST["namaPelanggan"];
-$produkPilihan = $_POST["produkPilihan"];
-$jumlahBeli = $_POST["jumlahBeli"];
+$namaPelanggan = isset($_POST["namaPelanggan"]) ? $_POST["namaPelanggan"] : '';
+$produkPilihan = isset($_POST["produkPilihan"]) ? $_POST["produkPilihan"] : '';
+$jumlahBeli = isset($_POST["jumlahBeli"]) ? $_POST["jumlahBeli"] : '';
 
-// Menghitung total belanja
-$totalBelanja = $produk[$produkPilihan] * $jumlahBeli;
+// Inisialisasi variabel
+$totalBelanja = 0;
+$diskon = 0;
+$ppn = 0;
+$hargaBersih = 0;
 
-// Menghitung diskon
-$diskon = 0.2 * $totalBelanja;
+if (!empty($namaPelanggan) && !empty($produkPilihan) && !empty($jumlahBeli)) {
+    // Menghitung total belanja jika produk pilihan tersedia dalam array produk
+    if (isset($produk[$produkPilihan])) {
+        // Menghitung total belanja
+        $totalBelanja = $produk[$produkPilihan] * $jumlahBeli;
 
-// Menghitung PPN
-$ppn = 0.1 * ($totalBelanja - $diskon);
+        // Menghitung diskon
+        $diskon = 0.2 * $totalBelanja;
 
-// Menghitung harga bersih
-$hargaBersih = $totalBelanja - $diskon + $ppn;
+        // Menghitung PPN
+        $ppn = 0.1 * ($totalBelanja - $diskon);
+
+        // Menghitung harga bersih
+        $hargaBersih = $totalBelanja - $diskon + $ppn;
+    } else {
+        // Produk pilihan tidak valid
+        echo "Produk pilihan tidak valid.";
+    }
+}
 
 ?>
 
@@ -66,32 +80,37 @@ $hargaBersih = $totalBelanja - $diskon + $ppn;
 
     <?php
     if (isset($namaPelanggan) && isset($produkPilihan) && isset($jumlahBeli)) {
-        ?>
-        <h2>Hasil Perhitungan</h2>
+        if (isset($produk[$produkPilihan])) {
+            ?>
+            <h2>Hasil Perhitungan</h2>
 
-        <p>Nama Pelanggan: <?php echo $namaPelanggan; ?></p>
-        <p>Produk Pilihan: <?php echo $produkPilihan; ?></p>
-        <p>Jumlah Beli: <?php echo $jumlahBeli; ?></p>
+            <p>Nama Pelanggan: <?php echo $namaPelanggan; ?></p>
+            <p>Produk Pilihan: <?php echo $produkPilihan; ?></p>
+            <p>Jumlah Beli: <?php echo $jumlahBeli; ?></p>
 
-        <br>
+            <br>
 
-        <table border="1">
-            <tr>
-                <th>Harga Satuan</th>
-                <th>Total Belanja</th>
-                <th>Diskon</th>
-                <th>PPN</th>
-                <th>Harga Bersih</th>
-            </tr>
-            <tr>
-                <td>Rp. <?php echo number_format($produk[$produkPilihan]); ?></td>
-                <td>Rp. <?php echo number_format($totalBelanja); ?></td>
-                <td>Rp. <?php echo number_format($diskon); ?></td>
-                <td>Rp. <?php echo number_format($ppn); ?></td>
-                <td>Rp. <?php echo number_format($hargaBersih); ?></td>
-            </tr>
-        </table>
-        <?php
+            <table border="1">
+                <tr>
+                    <th>Harga Satuan</th>
+                    <th>Total Belanja</th>
+                    <th>Diskon</th>
+                    <th>PPN</th>
+                    <th>Harga Bersih</th>
+                </tr>
+                <tr>
+                    <td>Rp. <?php echo number_format($produk[$produkPilihan]); ?></td>
+                    <td>Rp. <?php echo number_format($totalBelanja); ?></td>
+                    <td>Rp. <?php echo number_format($diskon); ?></td>
+                    <td>Rp. <?php echo number_format($ppn); ?></td>
+                    <td>Rp. <?php echo number_format($hargaBersih); ?></td>
+                </tr>
+            </table>
+            <?php
+        } else {
+            // Produk pilihan tidak valid
+            echo "Produk pilihan belum tersedia.";
+        }
     }
     ?>
 </body>
